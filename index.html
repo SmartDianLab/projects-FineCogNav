@@ -1,0 +1,710 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FineCog-Nav - SmartDianLab</title>
+<meta name="description" content="FineCog-Nav: Integrating Fine-grained Cognitive Modules for Zero-shot Multimodal UAV Navigation.">
+<link href="./assets/style.css" rel="stylesheet">
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  .image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow: auto;
+  }
+  .image-modal-content {
+    margin: auto;
+    display: block;
+    max-width: 95%;
+    max-height: 95%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .image-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+  }
+  .image-modal-close:hover,
+  .image-modal-close:focus {
+    color: #bbb;
+  }
+</style>
+<script>
+  function showFullImage(src) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    modal.style.display = 'block';
+    modalImg.src = src;
+  }
+
+  function closeImageModal() {
+    document.getElementById('imageModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target == modal) {
+      closeImageModal();
+    }
+  }
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      closeImageModal();
+    }
+  });
+
+  function showComingSoon(event) {
+    event.preventDefault();
+    alert('Coming soon');
+  }
+</script>
+</head>
+
+<body>
+  <header class="page-header">
+    <div class="header-content">
+      <h2 class="header-title">FineCog-Nav</h2>
+      <nav class="header-nav">
+        <a href="#abstract">Abstract</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#qualitative">Qualitative</a>
+        <a href="#dataset">Dataset</a>
+        <a href="#bibtex">Citation</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="content">
+    <h1><b>FineCog-Nav: Integrating Fine-grained Cognitive Modules for Zero-shot Multimodal UAV Navigation</b></h1>
+
+    <p style="text-align: center;">
+      <span class="conference-badge">CVPR 2026</span>
+    </p>
+
+    <p id="authors" class="serif">
+      <span style="font-size: 1.0em">
+        <a href="https://scholar.google.com/citations?user=amxDSLoAAAAJ&hl=en" target="_blank">Dian Shao</a><sup>1</sup><sup>&dagger;</sup>, Zhengzheng Xu<sup>1</sup>, Peiyang Wang<sup>2</sup>, <a href="https://likeliu.com" target="_blank">Like Liu</a><sup>1</sup>, Yule Wang<sup>1</sup>, <a href="https://scholar.google.com/citations?hl=en" target="_blank">Jieqi Shi</a>, Jing Huo<sup>2</sup>
+      </span>
+      <br>
+      <span style="font-size: 0.9em; margin-top: 0.6em">
+        <sup>1</sup>Northwestern Polytechnical University &nbsp;&nbsp; <sup>2</sup>Nanjing University
+      </span>
+      <br>
+      <span style="font-size: 0.85em; color: #666; margin-top: 0.3em"><sup>&dagger;</sup>Corresponding Authors</span>
+    </p>
+
+    <p style="text-align: center; margin-top: 25px;">
+      <a href="#" onclick="showComingSoon(event)" class="link-button">📄 Paper</a>
+      <a href="#" onclick="showComingSoon(event)" class="link-button">📝 arXiv</a>
+      <a href="#" onclick="showComingSoon(event)" class="link-button">💻 Code</a>
+      <a href="#" onclick="showComingSoon(event)" class="link-button">💾 Dataset</a>
+    </p>
+  </div>
+
+  <div class="content" id="abstract">
+    <p class="section-title">Abstract</p>
+    <div style="display: flex; gap: 1.2em; align-items: flex-start; margin-top: 1.2em; flex-wrap: wrap;">
+      <div style="flex: 1 1 360px; min-width: 280px;">
+        <img src="./assets/Poster_FineCog-Nav.jpg" style="width: 100%; height: clamp(180px, 22vw, 260px); object-fit: contain; border-radius: 8px; cursor: pointer;" alt="FineCog-Nav Poster" onclick="showFullImage(this.src)">
+        <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Poster</p>
+      </div>
+      <div style="flex: 1 1 360px; min-width: 280px;">
+        <img src="./assets/finecog_teaser.png" style="width: 100%; height: clamp(180px, 22vw, 260px); object-fit: contain; border-radius: 8px; cursor: pointer;" alt="FineCog-Nav Teaser" onclick="showFullImage(this.src)">
+        <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Teaser</p>
+      </div>
+    </div>
+    <p class="abstract-text" style="margin-top: 1em;">
+      Vision-Language Navigation (VLN) for UAVs requires understanding ambiguous multi-step instructions and executing long-horizon planning in complex 3D environments from an egocentric view.
+      Existing zero-shot methods often rely on very large models, generic prompts, and loosely organized modules, which limits robustness and interpretability.
+      We propose <strong>FineCog-Nav</strong>, a top-down framework that simulates human cognition through fine-grained collaborative modules, including perception, attention, memory, imagination, reasoning, planning, and decision-making.
+      Each module is driven by a moderate-sized foundation model with carefully designed cognitive-role prompts and structured input-output protocols.
+      To support detailed evaluation, we construct <strong>AerialVLN-Fine</strong>, a curated benchmark with 300 trajectories, sentence-level instruction-trajectory alignment, and refined landmark-grounded instructions.
+      Experiments show that FineCog-Nav consistently improves instruction adherence, long-horizon planning quality, and generalization to unseen environments in zero-shot UAV navigation.
+    </p>
+  </div>
+
+  <div class="content" id="method">
+    <p class="section-title">Method</p>
+    <div class="framework-image">
+      <img src="./assets/finecog_pipeline.png" alt="FineCog-Nav Framework" onclick="showFullImage(this.src)" style="cursor: pointer;">
+      <p style="text-align: center; margin-top: 0.6em; font-size: 0.95em; color: #224b8d; font-weight: 600;">FineCog-Nav Framework Pipeline</p>
+    </div>
+    <p class="framework-text">
+      FineCog-Nav organizes zero-shot UAV navigation into a closed cognitive loop: (1) instruction parsing and subgoal extraction, (2) attention-guided perception,
+      (3) imagination-assisted subgoal judgment, (4) multi-level memory management at step/subgoal/instruction granularity, and (5) explainable decision-making with collision-aware action selection.
+      This modular interdependence improves interpretability and task progression over monolithic prompting pipelines.
+    </p>
+    <p class="framework-text">
+      Task objective: let the final UAV position $p_{stop}$ approach destination $p_{dest}$ under threshold $\delta$, i.e. $\|p_{stop} - p_{dest}\| \leq \delta$.
+      The action space includes movement, turning, altitude changes, and task completion.
+    </p>
+  </div>
+
+  <div class="content" id="results">
+    <p class="section-title">Experimental Results</p>
+    <h3 style="font-size: 1.25em; margin-top: 1.2em; margin-bottom: 0.8em; color: #224b8d;">Table 1. Comparison with Single-module BaseModel</h3>
+    <p class="framework-text" style="margin-top: 0.3em;">
+      We evaluate several base LLMs with basic prompts, forming single-module baselines referred to as BaseModels. For a fair and meaningful comparison, all experiments are conducted on AerialVLN-Fine, which provides a cleaner and more discriminative benchmark. FineCog-Nav consistently outperforms BaseModel across metrics.
+    </p>
+    <div style="overflow-x: auto; margin: 1.2em 0 2em 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.92em; background-color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <thead>
+          <tr style="background-color: #224b8d; color: white;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Model</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Method</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">SR2D (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">SR3D (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">OSR (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">NE (m)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">nDTW (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">PL (m)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">Steps</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Gemini 2.5 Flash-Lite</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">240.04</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.84</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">329.78</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">129.70</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Gemini 2.5 Flash-Lite</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">4.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">120.70</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">15.66</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">146.24</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">57.52</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">GPT-4o-mini</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">325.98</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.74</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">350.43</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">103.10</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">GPT-4o-mini</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">4.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">100.37</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">20.45</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">56.98</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">31.73</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">InternLM3-8B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">128.13</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">14.01</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">86.30</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">34.65</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">InternLM3-8B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">120.72</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">14.91</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">139.72</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">42.22</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">ChatGLM-4-9B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">124.03</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">13.27</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">50.19</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">20.36</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">ChatGLM-4-9B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">97.05</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.26</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">30.49</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.39</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">InternLM2.5-20B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">152.34</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">9.94</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">141.27</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">74.16</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">InternLM2.5-20B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">4.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">103.94</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.35</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">61.05</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">28.49</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">ChatGLM-4-32B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">5.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">180.66</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">10.59</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">235.03</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">104.20</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">ChatGLM-4-32B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">5.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">94.18</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">21.25</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">45.91</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">20.18</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Qwen3-32B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">142.72</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">17.07</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">114.56</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">39.12</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Qwen3-32B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">5.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">4.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">7.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">95.31</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">20.31</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">60.36</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">26.05</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Llama3.3-70B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">5.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">263.10</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">9.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">329.36</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">111.48</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Llama3.3-70B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">9.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">98.84</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">20.17</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">84.96</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">38.91</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Qwen2.5-72B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">BaseModel</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">270.10</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">10.69</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">298.24</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">116.91</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Qwen2.5-72B</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">9.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">91.43</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">22.48</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">67.96</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">33.90</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size: 1.25em; margin-top: 1.6em; margin-bottom: 0.8em; color: #224b8d;">Table 2. Comparison with Framework Baselines</h3>
+    <p class="framework-text" style="margin-top: 0.3em;">
+      We first evaluate on AerialVLN-Fine, followed by scalable experiments on the larger and noisier AerialVLN-S-Val subset. Across both datasets, FineCog-Nav consistently outperforms all baselines across all metrics, validating the efficacy of the cognitive collaborative framework.
+    </p>
+    <div style="overflow-x: auto; margin: 1.2em 0 2em 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.98em; background-color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <thead>
+          <tr style="background-color: #224b8d; color: white;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Dataset</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Method</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">SR2D (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">SR3D (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">OSR (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">nDTW (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">NE (m)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">PL (m)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">Steps</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">AerialVLN-Fine</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">NavGPT</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">15.90</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">110.94</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">21.44</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">9.33</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">AerialVLN-Fine</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">DiscussNav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.63</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">98.36</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">39.51</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">17.76</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">AerialVLN-Fine</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">9.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">22.48</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">91.43</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">67.96</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">33.90</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">AerialVLN-S-Val</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">NavGPT</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.12</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.12</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.46</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.29</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">135.65</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">44.92</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">13.02</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">AerialVLN-S-Val</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">DiscussNav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.46</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.46</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.93</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">158.46</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">81.06</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">22.46</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">AerialVLN-S-Val</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">FineCog-Nav</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.97</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.50</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">1.85</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">11.47</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">130.32</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">75.28</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">34.52</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size: 1.25em; margin-top: 1.6em; margin-bottom: 0.8em; color: #224b8d;">Table 3. Ablation Analysis</h3>
+    <p class="framework-text" style="margin-top: 0.3em;">
+      Single-module ablations show that removing any module leads to performance drops, with the largest decline occurring when hierarchical memory is replaced by plain history. Joint ablations also degrade performance. The best results are achieved when all modules are enabled.
+    </p>
+    <div style="overflow-x: auto; margin: 1.2em 0 2em 0;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.94em; background-color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <thead>
+          <tr style="background-color: #224b8d; color: white;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Attn.</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Imag.</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Subgoal</th>
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Mem.</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">SR (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">OSR (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">NE (m)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">nDTW (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">S-SR (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">S-OSR (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">S-NE (m)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">No</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">H</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">7.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">104.38</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.55</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.92</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">26.46</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">66.21</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">No</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">H</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">5.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">101.27</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">20.48</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">24.21</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">64.85</td>
+          </tr>
+          <tr style="background-color: #f9f9f9;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">No</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">H</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">4.33</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">102.32</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.13</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.42</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">24.28</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">65.54</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">P</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">0.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">2.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">97.76</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.69</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.42</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">23.50</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">62.90</td>
+          </tr>
+          <tr style="background-color: #fffbe8;">
+            <td style="padding: 10px; border: 1px solid #ddd;">No</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">No</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">H</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">3.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">106.59</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">18.14</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.35</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">27.30</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">70.16</td>
+          </tr>
+          <tr style="background-color: #fffbe8;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">No</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">No</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">H</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">4.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">8.67</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">98.75</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.78</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">16.68</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">26.46</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">65.36</td>
+          </tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;">
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">Yes</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">H</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">6.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">9.00</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">91.43</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">22.48</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">22.03</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">27.23</td>
+            <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">59.02</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size: 1.25em; margin-top: 1.6em; margin-bottom: 0.8em; color: #224b8d;">Table 4. Sentence-level Analysis</h3>
+    <p class="framework-text" style="margin-top: 0.3em;">
+      Recall that AerialVLN-Fine provides sentence-level annotations for fine-grained evaluation. As the base LLM size increases, performance steadily improves. Small sentence-level differences can accumulate over long trajectories, leading to larger gaps in full-trajectory metrics.
+    </p>
+    <div style="overflow-x: auto; margin: 1.2em 0 2em 0; max-width: 760px;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.96em; background-color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <thead>
+          <tr style="background-color: #224b8d; color: white;">
+            <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Base LLM</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">S-SR (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">S-nDTW (%)</th>
+            <th style="padding: 10px; text-align: center; border: 1px solid #ddd;">S-NE (m)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 10px; border: 1px solid #ddd;">Gemini2.5-Flash-Lite</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">16.40</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">26.33</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">79.00</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #ddd;">GPT-4o-mini</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.56</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">28.58</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">65.96</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 10px; border: 1px solid #ddd;">InternLM3-8B</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">15.62</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">28.19</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">72.01</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #ddd;">ChatGLM-4-9B</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.92</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">31.42</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">62.18</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 10px; border: 1px solid #ddd;">InternLM2.5-20B</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">19.00</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">34.11</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">67.67</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #ddd;">ChatGLM-4-32B</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">15.95</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">23.20</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">62.67</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 10px; border: 1px solid #ddd;">Qwen3-32B</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">18.76</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">30.04</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">62.42</td></tr>
+          <tr><td style="padding: 10px; border: 1px solid #ddd;">Llama3.3-70B</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">21.32</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">33.89</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">64.82</td></tr>
+          <tr style="background-color: #eaf6ff; font-weight: 700;"><td style="padding: 10px; border: 1px solid #ddd;">Qwen2.5-72B</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">22.03</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">35.37</td><td style="padding: 10px; text-align: center; border: 1px solid #ddd;">59.02</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="framework-text">
+      Across all four tables, the results consistently support the same conclusion: a cognition-inspired, collaborative modular framework enables more reliable and interpretable zero-shot UAV navigation than both single-module prompting and existing multi-agent baselines.
+    </p>
+  </div>
+
+  <div class="content" id="qualitative">
+    <p class="section-title">Qualitative Analysis</p>
+    <div style="text-align: center; margin: 1.8em 0;">
+      <img src="./assets/finecog_qualitative.jpg" style="width: 92%; max-width: 1200px; cursor: pointer;" alt="FineCog-Nav qualitative trajectories" onclick="showFullImage(this.src)">
+      <p style="text-align: center; margin-top: 0.6em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Qualitative Navigation Trajectories</p>
+    </div>
+    <p class="framework-text">
+      Representative trajectories show that the agent grounds language cues to visible landmarks and executes coherent subgoal transitions.
+      Even in difficult cases, FineCog-Nav tends to keep instruction-consistent behavior rather than drifting early.
+    </p>
+
+    <div style="text-align: center; margin: 1.8em 0;">
+      <img src="./assets/finecog_human_study.png" style="width: 92%; max-width: 1100px; cursor: pointer;" alt="FineCog-Nav human study" onclick="showFullImage(this.src)">
+      <p style="text-align: center; margin-top: 0.6em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Human Study Results</p>
+    </div>
+    <p class="framework-text">
+      Human study results further support the quantitative findings: participants generally prefer FineCog-Nav for instruction-following quality and perceived navigation intelligence.
+    </p>
+  </div>
+
+  <div class="content" id="dataset">
+    <p class="section-title">AerialVLN-Fine Dataset</p>
+
+    <div style="text-align: center; margin: 2em 0;">
+      <img src="./assets/finecog_dataset.png" style="width: 92%; max-width: 1200px; cursor: pointer;" alt="AerialVLN-Fine overview" onclick="showFullImage(this.src)">
+      <p style="text-align: center; margin-top: 0.6em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Figure 4. Overview of AerialVLN-Fine</p>
+    </div>
+
+    <p class="framework-text">
+      AerialVLN-Fine is a curated benchmark built from AerialVLN for more reliable zero-shot UAV VLN evaluation.
+      It provides sentence-level alignment between instruction segments and trajectory segments, and refines ambiguous expressions with explicit visual endpoints and landmark references.
+    </p>
+
+    <h3 style="font-size: 1.3em; margin-top: 1.5em; margin-bottom: 0.8em; color: #224b8d;">Key Statistics</h3>
+    <ul style="font-size: 1.1em; line-height: 1.8; margin: 0.5em 3em 1.2em 3em; text-align: left;">
+      <li>Total trajectories: 300 high-quality instruction-trajectory pairs</li>
+      <li>Source split: Val-Seen and Val-Unseen scenes from AerialVLN</li>
+      <li>Average per trajectory: 189 meters and 76 actions</li>
+      <li>Fine-grained semantics: 4.6 aligned instruction sentences per trajectory</li>
+      <li>Total scale: 56,050 meters and 22,835 actions</li>
+      <li>Instruction refinement: total words 17,572 to 30,762; average length 59 to 103</li>
+      <li>Sentence-level total: 1,383 aligned sentences (average 41 meters, 17 actions)</li>
+    </ul>
+
+    <p class="framework-text">
+      The dataset is designed to support fine-grained capability diagnosis and sentence-level evaluation, while keeping annotation quality high through repeated manual verification.
+    </p>
+  </div>
+
+  <div class="content" id="bibtex">
+    <p class="section-title">Citation</p>
+    <div class="bibtex-box"><pre>Coming soon.</pre></div>
+  </div>
+
+  <div class="content" id="contact">
+    <p class="section-title">Contact</p>
+    <p style="text-align: center; font-size: 1.1em; line-height: 2;">
+      For questions about this work, please contact:<br>
+      <a href="mailto:shaodian@nwpu.edu.cn" style="color: #224b8d; text-decoration: none; border-bottom: 1px solid #224b8d;">shaodian@nwpu.edu.cn</a>
+      &nbsp;|&nbsp;
+      <a href="mailto:isjieqi@nju.edu.cn" style="color: #224b8d; text-decoration: none; border-bottom: 1px solid #224b8d;">isjieqi@nju.edu.cn</a>
+    </p>
+  </div>
+
+  <footer class="page-footer">
+    <div class="footer-content">
+      <p>© 2026 SmartDianLab. All rights reserved.</p>
+      <p class="footer-credits">
+        Website source code available at <a href="https://github.com/SmartDianLab/Projects-FineCogNav" target="_blank">Projects-FineCogNav</a>.
+      </p>
+    </div>
+  </footer>
+
+  <div id="imageModal" class="image-modal">
+    <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+    <img class="image-modal-content" id="modalImage" alt="Full size preview">
+  </div>
+
+</body>
+</html>
