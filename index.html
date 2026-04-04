@@ -123,17 +123,27 @@
       <a href="https://github.com/SmartDianLab/FineCogNav" target="_blank" class="link-button">💻 Code</a>
       <a href="https://huggingface.co/datasets/Lozumi/AerialVLN-Fine" target="_blank" class="link-button">💾 Dataset</a>
     </p>
+
+    <div style="display: flex; gap: 1.2em; align-items: flex-start; justify-content: center; margin-top: 1.2em; flex-wrap: wrap;">
+      <div style="flex: 0 0 auto; width: auto; max-width: 100%; min-width: 0;">
+        <img src="./assets/Poster_FineCog-Nav.jpg" style="max-width: 100%; width: auto; height: clamp(180px, 22vw, 260px); display: block; margin: 0 auto; border-radius: 8px; cursor: pointer;" alt="FineCog-Nav Poster" onclick="showFullImage(this.src)">
+        <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Poster</p>
+      </div>
+      <div style="flex: 0 0 auto; width: auto; max-width: 100%; min-width: 0;">
+        <video controls style="max-width: 100%; width: auto; height: clamp(180px, 22vw, 260px); aspect-ratio: 16 / 9; display: block; margin: 0 auto; object-fit: contain; border-radius: 8px; background: #000;" aria-label="FineCog-Nav Demo Video">
+          <source src="./assets/demo_video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+        <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Demo Video</p>
+      </div>
+    </div>
   </div>
 
   <div class="content" id="abstract">
     <p class="section-title">Abstract</p>
     <div style="display: flex; gap: 1.2em; align-items: flex-start; margin-top: 1.2em; flex-wrap: wrap;">
       <div style="flex: 1 1 360px; min-width: 280px;">
-        <img src="./assets/Poster_FineCog-Nav.jpg" style="width: 100%; height: clamp(180px, 22vw, 260px); object-fit: contain; border-radius: 8px; cursor: pointer;" alt="FineCog-Nav Poster" onclick="showFullImage(this.src)">
-        <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Poster</p>
-      </div>
-      <div style="flex: 1 1 360px; min-width: 280px;">
-        <img src="./assets/finecog_teaser.jpg" style="width: 100%; height: clamp(180px, 22vw, 260px); object-fit: contain; border-radius: 8px; cursor: pointer;" alt="FineCog-Nav Teaser" onclick="showFullImage(this.src)">
+        <img src="./assets/finecog_teaser.jpg" style="max-width: 100%; width: auto; height: clamp(180px, 22vw, 260px); display: block; margin: 0 auto; border-radius: 8px; cursor: pointer;" alt="FineCog-Nav Teaser" onclick="showFullImage(this.src)">
         <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Teaser</p>
       </div>
     </div>
@@ -625,6 +635,15 @@
 
     <p class="framework-text">
       Across all four tables, the results consistently support the same conclusion: a cognition-inspired, collaborative modular framework enables more reliable and interpretable zero-shot UAV navigation than both single-module prompting and existing multi-agent baselines.
+    </p>
+
+    <h3 style="font-size: 1.25em; margin-top: 1.6em; margin-bottom: 0.8em; color: #224b8d;">Real-World Deployment</h3>
+    <div style="text-align: center; margin: 1.6em 0;">
+      <img src="./assets/finecog_real_world.png" style="width: 92%; max-width: 1200px; cursor: pointer;" alt="FineCog-Nav real-world deployment" onclick="showFullImage(this.src)">
+      <p style="text-align: center; margin-top: 0.6em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Real-World Deployment</p>
+    </div>
+    <p class="framework-text">
+      As shown in the figure above, we deployed FineCog-Nav on a real UAV and provided a preliminary validation of its feasibility in a real-world setting.
     </p>
   </div>
 
