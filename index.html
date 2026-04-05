@@ -130,10 +130,17 @@
         <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Poster</p>
       </div>
       <div style="flex: 0 0 auto; width: auto; max-width: 100%; min-width: 0;">
-        <video controls style="max-width: 100%; width: auto; height: clamp(180px, 22vw, 260px); aspect-ratio: 16 / 9; display: block; margin: 0 auto; object-fit: contain; border-radius: 8px; background: #000;" aria-label="FineCog-Nav Demo Video">
-          <source src="./assets/demo_video.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/HXIjDIhoI0Y?si=QIqMMl10iVvMRxg6"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+          style="max-width: 100%; width: auto; height: clamp(180px, 22vw, 260px); aspect-ratio: 16 / 9; display: block; margin: 0 auto; border-radius: 8px; background: #000;"
+        ></iframe>
         <p style="text-align: center; margin-top: 0.4em; font-size: 0.95em; color: #224b8d; font-weight: 600;">Demo Video</p>
       </div>
     </div>
@@ -148,12 +155,13 @@
       </div>
     </div>
     <p class="abstract-text" style="margin-top: 1em;">
-      Vision-Language Navigation (VLN) for UAVs requires understanding ambiguous multi-step instructions and executing long-horizon planning in complex 3D environments from an egocentric view.
-      Existing zero-shot methods often rely on very large models, generic prompts, and loosely organized modules, which limits robustness and interpretability.
-      We propose <strong>FineCog-Nav</strong>, a top-down framework that simulates human cognition through fine-grained collaborative modules, including perception, attention, memory, imagination, reasoning, planning, and decision-making.
-      Each module is driven by a moderate-sized foundation model with carefully designed cognitive-role prompts and structured input-output protocols.
-      To support detailed evaluation, we construct <strong>AerialVLN-Fine</strong>, a curated benchmark with 300 trajectories, sentence-level instruction-trajectory alignment, and refined landmark-grounded instructions.
-      Experiments show that FineCog-Nav consistently improves instruction adherence, long-horizon planning quality, and generalization to unseen environments in zero-shot UAV navigation.
+      UAV vision-language navigation (VLN) requires an agent to navigate complex 3D environments from an egocentric perspective while following ambiguous multi-step instructions over long horizons.
+      Existing zero-shot methods remain limited, as they often rely on large base models, generic prompts, and loosely coordinated modules.
+      In this work, we propose <strong>FineCog-Nav</strong>, a top-down framework inspired by human cognition that organizes navigation into fine-grained modules for perception, attention, memory, imagination, reasoning, planning, and decision-making.
+      Each module is driven by a moderate-sized foundation model with role-specific prompts and structured input-output protocols, enabling effective collaboration and improved interpretability.
+      To support fine-grained evaluation, we construct <strong>AerialVLN-Fine</strong>, a curated benchmark of 300 trajectories derived from AerialVLN, with sentence-level instruction-trajectory alignment and refined instructions containing explicit visual endpoints and landmark references.
+      Experiments show that FineCog-Nav consistently outperforms zero-shot baselines in instruction adherence, long-horizon planning, and generalization to unseen environments.
+      These results suggest the effectiveness of fine-grained cognitive modularization for zero-shot aerial navigation.
     </p>
   </div>
 
